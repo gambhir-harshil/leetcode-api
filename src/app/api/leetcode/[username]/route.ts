@@ -11,16 +11,24 @@ export async function GET(
     body: JSON.stringify({
       query: `
             { matchedUser(username: "${context.params.username}") {
-            username
-            submitStats: submitStatsGlobal {
-              acSubmissionNum {
-              difficulty
-              count
-              submissions
+              username
+              submitStats: submitStatsGlobal {
+                acSubmissionNum {
+                  difficulty
+                  count
+                  submissions
+                }
+                
+                totalSubmissionNum { 
+                  difficulty 
+                  count 
+                  submissions 
+                }
+              }
+              submissionCalendar
+              profile { reputation ranking }
             }
-          }
-        }
-      }`,
+          }`,
     }),
   };
   const response = await fetch(LEETCODE_GRAPHQL_URL, opts);
