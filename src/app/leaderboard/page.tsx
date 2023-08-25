@@ -7,12 +7,19 @@ interface SubmissionStats {
   submissions: number;
 }
 
+interface Profile {
+  reputation: number;
+  ranking: number;
+}
+
 interface UserData {
   username: string;
   submitStats: {
     acSubmissionNum: SubmissionStats[];
     totalSubmissionNum: SubmissionStats[];
   };
+  submissionCalendar: string;
+  profile: Profile;
 }
 
 function UserPage() {
