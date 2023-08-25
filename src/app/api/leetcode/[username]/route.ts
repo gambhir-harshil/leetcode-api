@@ -33,5 +33,5 @@ export async function GET(
   };
   const response = await fetch(LEETCODE_GRAPHQL_URL, opts);
   const resp = await response.json();
-  return NextResponse.json({ data: resp }, { status: 200 });
+  return NextResponse.json({ resp }, { status: 200 });
 }
