@@ -50,7 +50,7 @@ function UserPage() {
   //acceptancy rate
   const goodSubmissions = userData?.submitStats.acSubmissionNum[0].submissions;
   const totalSubmissions = userData?.submitStats.totalSubmissionNum[0].submissions;
-  const acceptanceRate = goodSubmissions !== 0 ? ((goodSubmissions / totalSubmissions) * 100).toFixed(2) : 0;
+  const acceptanceRate = goodSubmissions ? ((goodSubmissions / totalSubmissions) * 100).toFixed(2) : 0;
 
   //rank
   const rank = userData?.profile.ranking;
