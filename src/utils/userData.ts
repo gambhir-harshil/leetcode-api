@@ -6,8 +6,8 @@ export default class UserData {
   easy: number;
   medium: number;
   hard: number;
-  goodSubmissions: number;
-  totalSubmissions: number;
+  _goodSubmissions: number;
+  _totalSubmissions: number;
   acceptanceRate: number;
   rank: number;
   submissionCalendar: any;
@@ -23,8 +23,8 @@ export default class UserData {
     this.easy = undefined || 0;
     this.medium = undefined || 0;
     this.hard = undefined || 0;
-    this.goodSubmissions = undefined || 0;
-    this.totalSubmissions = undefined || 0;
+    this._goodSubmissions = undefined || 0;
+    this._totalSubmissions = undefined || 0;
     this.acceptanceRate = undefined || 0;
     this.rank = undefined || 0;
     this.submissionCalendar = undefined;
@@ -49,13 +49,13 @@ export default class UserData {
       this.easy = matchedUser.submitStats.acSubmissionNum[1].count;
       this.medium = matchedUser.submitStats.acSubmissionNum[2].count;
       this.hard = matchedUser.submitStats.acSubmissionNum[3].count;
-      this.goodSubmissions =
+      this._goodSubmissions =
         matchedUser.submitStats.acSubmissionNum[0].submissions;
-      this.totalSubmissions =
+      this._totalSubmissions =
         matchedUser.submitStats.totalSubmissionNum[0].submissions;
-      this.acceptanceRate = this.goodSubmissions
+      this.acceptanceRate = this._goodSubmissions
         ? Number(
-            ((this.goodSubmissions / this.totalSubmissions) * 100).toFixed(2)
+            ((this._goodSubmissions / this._totalSubmissions) * 100).toFixed(2)
           )
         : 0;
       this.rank = matchedUser.profile.ranking;
@@ -83,17 +83,6 @@ export default class UserData {
       return this;
     } catch (error) {
       console.error("Error fetching data:", error);
-    }
-  };
-
-  getCalender = () => {
-    for (const timeKey in this.submissionCalendarJson()) {
-      if (this.submissionCalendarJson.hasOwnProperty(timeKey)) {
-        this.submissionCalendar.set(
-          timeKey,
-          this.submissionCalendarJson[timeKey]
-        );
-      }
     }
   };
 }
