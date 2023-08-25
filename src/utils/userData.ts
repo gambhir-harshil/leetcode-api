@@ -39,8 +39,11 @@ export default class UserData {
     try {
       const response = await fetch(`${API_ROUTES.leetcode}/${username}`);
       const {
-        data: { matchedUser },
+        resp: {
+          data: { matchedUser },
+        },
       } = await response.json();
+
       this.username = matchedUser.username;
       this.totalSolved = matchedUser.submitStats.acSubmissionNum[0].count;
       this.easy = matchedUser.submitStats.acSubmissionNum[1].count;
@@ -76,6 +79,8 @@ export default class UserData {
 
       this.values = Array.from(this.submissionCalendar.values());
       this.recentTenSubmissions = this.values.slice(-10);
+
+      return this;
     } catch (error) {
       console.error("Error fetching data:", error);
     }

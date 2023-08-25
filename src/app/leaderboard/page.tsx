@@ -9,8 +9,8 @@ function UserPage() {
 
   useEffect(() => {
     async function fetchData() {
-      await userData.fetchLeetcodeData(username);
-      setUserStats(userData);
+      const data = await userData.fetchLeetcodeData(username);
+      setUserStats(data);
     }
     fetchData();
   }, [username]); // eslint-disable-line
