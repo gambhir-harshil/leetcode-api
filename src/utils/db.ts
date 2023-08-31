@@ -1,18 +1,25 @@
-import mongoose from "mongoose";
+import { connect, Schema, models, model } from "mongoose";
+import { IUser } from "./types";
 
 const { MONGODB_URI } = process.env;
 
 export const dbConnect = async () => {
-    const conn = await mongoose
-        .connect(MONGODB_URI as string)
-        .catch(err => console.log(err))
-    console.log("Connection Established!")
+  const conn = await connect(MONGODB_URI as string).catch((err) =>
+    console.log("Error connecting to mongodb", err)
+  );
+  console.log("Mongodb Connection Established!");
 
-    const UserSchema = new mongoose.Schema({
-        username: String
-    })
+  const UserSchema = new Schema<IUser>(
+    {
+      username: {
+        type: String,
+        required: true,
+      },
+    },
+    { timestamps: true }
+  );
 
-    const User = mongoose.models.User || mongoose.model("User", UserSchema)
+  const User = models.User || model<IUser>("User", UserSchema);
 
-    return { conn, User }
-}
+  return { conn, User };
+};
