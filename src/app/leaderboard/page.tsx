@@ -15,11 +15,13 @@ function UserPage() {
     fetchData();
   }, [username]); // eslint-disable-line
 
+  console.log(userStats);
+
   return (
     <div>
       {userStats ? (
         <div>
-          <h1>User: {userData.username}</h1>
+          <h1>User: {userStats.username}</h1>
           <h2>Submission Stats</h2>
           <ul>
             {userStats.submitStats.acSubmissionNum.map(
