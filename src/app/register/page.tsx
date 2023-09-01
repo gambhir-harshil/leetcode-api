@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React from 'react'
 
-interface IRegisterProps {
+type Props = {}
+
+const Register = (props: Props) => {
+  return (
+    <div>page</div>
+  )
 }
 
-const Register: React.FunctionComponent<IRegisterProps> = (props) => {
-  return ;
-};
-
-export default Register;
+export default Register

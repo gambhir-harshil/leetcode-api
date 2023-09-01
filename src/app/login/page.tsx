@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React from 'react'
 
-interface IAppProps {
+type Props = {}
+
+const Login = (props: Props) => {
+  return (
+    <div>login</div>
+  )
 }
 
-const Login: React.FunctionComponent<IAppProps> = (props) => {
-  return ;
-};
-
-export default Login;
+export default Login
