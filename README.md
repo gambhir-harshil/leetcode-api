@@ -1,34 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Roadmap
 
-## Getting Started
+### UI
 
-First, run the development server:
+-  **Login and Regsiter pages**
+    - [ ] Design the UI
+-  **Home Page**
+    - [ ]  Home Page with all the stats of the user.
+    - [ ]  A sidebar component of leaderboard.
+    - [ ]  A chart showing the trends of the number of submissions made by the user in the past 10 days.
+    - [ ]  Navbar having the links for Practice and Leaderboard section. (Navbar would be same throughout the application)
+- **Leader Board**
+    - [ ]  A leaderboard table with with just the rank and number of easy, medium, hard questions and a heatgraph for 10 days
+    - [ ]  Rest of the user stats will be available on the user-stats page (home page for now)
+- **Game UI**
+    - [ ]  The UI with levels and popups linked to docs
+    - [ ]  UI for each level
+- ************Level UI************
+    - [ ]  A sidebar component showing Friend’s progress (not discussed yet, could be scrapped)
+    - [ ]  Related topics to the question.
+    - [ ]  Best Time and space complexity for the problem.
+- [ ]  **Admin panel**
+- [ ]  Mobile Design
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+### Frontend
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [ ]  User Auth
+- ****************Homepage****************
+    - [ ]  Make a request to leetcode api and fetch the user stats
+    - [ ]  Display the user stats on the home page
+    - [ ]  Display the ranking of the users in the leaderboard component
+    - [ ]  Integrate chartJs to show the trend of the submissions
+- [ ]  ********************************************************Implement the leaderboard UI********************************************************
+- ****************Game UI****************
+    - [ ]  ******************************************Implement the game UI******************************************
+    - [ ]  Track and Display user’s progress.
+- [ ]  Implement the Level UI
+- [ ]  Implement the Admin Panel
+- [ ]  Responsive
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Backend
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- **Setup the Database**
+    - [ ]  Collection of username, email, password
+    - [ ]  Collection of user’s progress
+- [ ]  User Auth
+- [ ]  Create API endpoints to fetch leetcode user data
+- [ ]  Implement CRUD operations
