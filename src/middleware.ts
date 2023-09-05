@@ -12,18 +12,19 @@ interface AuthenticatedRequest extends NextRequest {
 export const middleware = async (req: NextRequest) => {
   let token: string | undefined;
 
-  // console.log("hi");
-  // console.log(req.nextUrl);
+  console.log("intercepted");
   if (req.cookies.has("token")) {
     token = req.cookies.get("token")?.value;
+  } else if (req.headers.get("Authorization")?.startsWith("Bearer ")) {
+    token = req.headers.get("Authorization")?.substring(7);
   }
+  console.log(req.nextUrl.pathname);
 
   if (req.nextUrl.pathname.startsWith("/login") && (!token || redirectToLogin))
     return;
-
   if (
     !token &&
-    (req.nextUrl.pathname.startsWith("/api/users") ||
+    (req.nextUrl.pathname.startsWith("/api/user") ||
       req.nextUrl.pathname.startsWith("/api/auth/logout"))
   ) {
     return getErrorRes(
@@ -67,5 +68,5 @@ export const middleware = async (req: NextRequest) => {
 };
 
 export const config = {
-  matcher: ["/profile", "/login", "/api/users/:path", "/api/auth/logout"],
+  matcher: ["/profile", "/login", "/api/user/:path*", "/api/auth/logout"],
 };

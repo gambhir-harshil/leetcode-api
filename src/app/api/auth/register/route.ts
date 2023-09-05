@@ -23,7 +23,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const user = await newUser.save();
     console.log(user);
     return NextResponse.json(
-      { msg: "success", data: { user: { ...user, password: undefined } } },
+      { msg: "success", userId: user._id },
       { status: 201 }
     );
   } catch (err: any) {
