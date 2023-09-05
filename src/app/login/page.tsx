@@ -2,7 +2,7 @@
 import React from 'react'
 import rocket from "../../assets/rocket.png";
 import Image from "next/image";
-
+import Link from 'next/link';
 
 type Props = {}
 
@@ -56,7 +56,7 @@ const Login = (props: Props) => {
             Begin your journey!
           </button>
           <p className="text-gray-400 text-center">
-            New Here? <span className="text-white">Register</span>
+            New Here? <Link className="text-white" href="/register">Register</Link>
           </p>
         </form>
       </div>

@@ -19,11 +19,11 @@ export async function GET(
                     count
                     submissions
                   }
-                  
-                  totalSubmissionNum { 
-                    difficulty 
-                    count 
-                    submissions 
+
+                  totalSubmissionNum {
+                    difficulty
+                    count
+                    submissions
                   }
                 }
                 submissionCalendar
@@ -32,6 +32,7 @@ export async function GET(
             }`,
       }),
     };
+    console.log(request.method)
     const response = await fetch(LEETCODE_GRAPHQL_URL, opts);
     const resp = await response.json();
     return NextResponse.json({ resp }, { status: 200 });

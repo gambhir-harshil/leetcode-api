@@ -15,6 +15,22 @@ export const dbConnect = async () => {
         type: String,
         required: true,
       },
+      password: {
+        type: String,
+        required: true
+      },
+      email: {
+        type: String,
+        required: true,
+        unique: true,
+        validate: {
+          validator: (value: string) => {
+            const emailRegex = /\S+@\S+\.\S+/;
+            return emailRegex.test(value);
+          },
+          message: "Invalid email format"
+        }
+      }
     },
     { timestamps: true }
   );
