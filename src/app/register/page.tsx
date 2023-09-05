@@ -25,7 +25,7 @@ const Register = (props: Props) => {
       <div className="flex justify-between px-16 pt-4">
         <div className="flex">
           <span className="text-white font-bold text-3xl tracking-[0.5rem]">
-            FNTF
+            NTF
           </span>
           <Image src={rocket} alt="rocket" className="h-12 w-12" />
         </div>
