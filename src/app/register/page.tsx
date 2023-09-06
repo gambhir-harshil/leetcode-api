@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import "./register.styles.css";
 import rocket from "../../assets/rocket.png";
 import Image from "next/image";
 
@@ -17,65 +16,36 @@ const Register = (props: Props) => {
       body: JSON.stringify({ username }),
     });
     const resJson = await res.json();
-    console.log(resJson)
+    console.log(resJson);
   };
 
   return (
-    <div className="register h-screen bg-black flex flex-col">
-      <div className="flex justify-between px-16 pt-4">
-        <div className="flex">
-          <span className="text-white font-bold text-3xl tracking-[0.5rem]">
-            FNTF
-          </span>
-          <Image src={rocket} alt="rocket" className="h-12 w-12" />
-        </div>
-        <button className="bg-blue-600 px-8 py-2 text-white text-lg font-semibold rounded-xl">
-          Login
-        </button>
-      </div>
-      <div className="flex justify-center items-center h-full">
-        <div className="register__container flex flex-col gap-4">
-          <h1 className="register__heading text-white text-5xl font-semibold text-center">
-            Welcome aboard!
+    <div className="auth">
+      <div className="auth__backdrop">
+        <div className="auth__container ">
+          <h1 className="auth__heading ">
+            Let's start the grind!
           </h1>
-          <p className="text-gray-400 text-center font-semibold text-lg">
-            Please enter your details.
-          </p>
           <form
             action="submit"
             className="register__form flex flex-col mt-4 gap-4"
           >
             <input
-              className="register__input"
+              className="auth__input"
               type="text"
-              placeholder="Username*"
+              placeholder="Leetcode Username"
               onChange={(e) => setUsername(e.target.value)}
             />
             <input
-              className="register__input"
+              className="auth__input"
               type="email"
-              placeholder="Email*"
+              placeholder="Email"
             />
             <input
-              className="register__input"
+              className="auth__input"
               type="password"
-              placeholder="Password*"
+              placeholder="Password"
             />
-            <input
-              className="register__input"
-              type="password"
-              placeholder="Confirm password*"
-            />
-            <div className="flex gap-2">
-              <input
-                className="accent-gray-400"
-                type="checkbox"
-                name="rememberMe"
-              />
-              <label className="text-gray-200 font-medium" htmlFor="rememberMe">
-                Would you like to be reminded of the daily problems?
-              </label>
-            </div>
             <div className="flex gap-2">
               <input
                 className="accent-gray-400"
@@ -88,15 +58,15 @@ const Register = (props: Props) => {
             </div>
             <button
               onClick={submitHandler}
-              className="bg-blue-600 py-2 text-white text-lg font-semibold rounded-3xl mt-2"
+              className="auth__btn"
             >
-              Begin your journey!
+              Register
             </button>
-            <p className="text-gray-400 text-center">
-              Not your first time? <span className="text-white">Login</span>
-            </p>
           </form>
         </div>
+        <p className="text-gray-400 text-center">
+          Already a member? <span className="text-blue-700 font-bold">Login</span>
+        </p>
       </div>
     </div>
   );
