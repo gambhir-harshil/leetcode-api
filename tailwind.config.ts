@@ -9,11 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
-        space: 'url(https://spaceimages.yash.codes/)'
-      },
-      backgroundColor: {
-        'glass-container': 'rgba(94, 94, 94, 0.10)',
-        'glass-input': 'rgba(134, 134, 134, 0.10)'
+        
       },
     },
   },
