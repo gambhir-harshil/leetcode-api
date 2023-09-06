@@ -34,7 +34,7 @@ const Login = (props: Props) => {
               </div>
               <span className="text-blue-700">Forgot password?</span>
             </div>
-            <button className="auth__btn">Begin your journey!</button>
+            <button className="auth__btn">Login</button>
           </form>
         </div>
         <p className="text-gray-400 text-center">

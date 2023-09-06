@@ -9,27 +9,4 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-.auth{
-    @apply h-screen flex flex-col bg-space bg-cover
-}
-
-.auth__backdrop{
-    @apply flex flex-col gap-4 justify-center items-center h-full bg-black/60 backdrop-blur-[5px]
-}
-
-.auth__input{
-    @apply px-4 py-4 bg-glass-input rounded-md outline-none text-gray-400 md:min-w-[350px]
-}
-
-.auth__btn{
-    @apply bg-blue-600 py-2 text-white text-lg font-semibold rounded-md mt-2
-}
-
-.auth__container{
-    @apply flex flex-col gap-4 bg-glass-container backdrop-blur-[50px] rounded-[25px] px-8 py-8
-}
-
-.auth__heading{
-    @apply text-white text-3xl font-semibold text-center
-}
 
