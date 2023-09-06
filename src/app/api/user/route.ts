@@ -1,18 +1,20 @@
+import { getErrorRes } from "@/lib/helpers";
 import { dbConnect } from "@/utils/db";
 import { NextRequest, NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
 
-export async function POST(request: NextRequest) {
-  try {
-    const req = await request.json();
-    const { conn, User } = await dbConnect();
-    await conn;
-    await User.validate(req);
-    const user = await User.create(req);
-
-    return NextResponse.json({ user }, { status: 201 });
-  } catch (error) {
-    console.error("", error);
-    return NextResponse.json({ error }, { status: 500 });
+export const GET = async (req: NextRequest) => {
+  const userId = req.headers.get("X-USER-ID");
+  if (!userId) {
+    return getErrorRes(401, "You are not logged in. Pls provide a token");
   }
-}
+  const { conn, User } = await dbConnect();
+  await conn;
+  const user = await User.findById(userId).select("-password").exec();
+  if (!user) {
+    return getErrorRes(400, "User not found");
+  }
+  return NextResponse.json({
+    msg: "success",
+    user: user.toObject(),
+  });
+};
