@@ -32,3 +32,11 @@
 .auth__heading {
   @apply text-white text-3xl font-semibold text-center;
 }
+
+.auth__group {
+  @apply flex flex-col
+}
+
+.auth__error {
+  @apply text-xs text-red-700 font-light mt-2 ml-2
+}
