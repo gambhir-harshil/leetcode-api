@@ -12,7 +12,7 @@ const RegisterForm = (props: Props) => {
       .min(8, "Password must be atleast 8 characters")
       .required("Password is required"),
     passwordConfirm: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .oneOf([Yup.ref("password")], "Passwords must match")
       .required("Confirm password is required"),
   });
 
