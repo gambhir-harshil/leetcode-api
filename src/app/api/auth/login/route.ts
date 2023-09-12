@@ -2,7 +2,7 @@ import { getEnvVar, getErrorRes } from "@/lib/helpers";
 import { signJWT } from "@/lib/token";
 import { LoginUserInput, LoginUserSchema } from "@/lib/validations/userSchema";
 import { dbConnect } from "@/utils/db";
-import { compare } from "bcrypt";
+import { compare } from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
@@ -13,7 +13,6 @@ export const POST = async (req: NextRequest) => {
 
     const { conn, User } = await dbConnect();
     await conn;
-    // const query = User.where({ email: data.email });
     const user = await User.findOne({ email: data.email }).exec();
 
     if (!user || !(await compare(data.password, user.password))) {
