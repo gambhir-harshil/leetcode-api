@@ -3,7 +3,7 @@ import {
   RegisterUserInput,
   RegisterUserSchema,
 } from "@/lib/validations/userSchema";
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 import { dbConnect } from "@/utils/db";
 import { ZodError } from "zod";
 import { getErrorRes } from "@/lib/helpers";
