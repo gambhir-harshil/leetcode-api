@@ -9,12 +9,16 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
-        space: 'url(https://spaceimages.yash.codes/)'
+        registerSpace: "url('/space.jpg')",
+        loginSpace: "url('/space1.jpg')"
       },
       backgroundColor: {
         'glass-container': 'rgba(94, 94, 94, 0.10)',
         'glass-input': 'rgba(134, 134, 134, 0.10)'
       },
+      boxShadow: {
+        'btn': '0px 0px 20px 10px rgba(41, 114, 255, 0.15)'
+      }
     },
   },
   plugins: [],
