@@ -44,7 +44,6 @@ const RegisterForm = (props: Props) => {
           className="auth__input"
           type="text"
           placeholder="Leetcode Username"
-          name="username"
           {...register("username")}
         />
         <span className="auth__error">{errors.username?.message}</span>
@@ -54,7 +53,6 @@ const RegisterForm = (props: Props) => {
           className="auth__input"
           type="email"
           placeholder="Email"
-          name="email"
           {...register("email")}
         />
         <span className="auth__error">{errors.email?.message}</span>
@@ -64,7 +62,6 @@ const RegisterForm = (props: Props) => {
           className="auth__input"
           type="password"
           placeholder="Password"
-          name="password"
           {...register("password")}
         />
         <span className="auth__error">{errors.password?.message}</span>
@@ -74,7 +71,6 @@ const RegisterForm = (props: Props) => {
           className="auth__input"
           type="password"
           placeholder="Confirm Password"
-          name="passwordConfirm"
           {...register("passwordConfirm")}
         />
         <span className="auth__error">{errors.passwordConfirm?.message}</span>
