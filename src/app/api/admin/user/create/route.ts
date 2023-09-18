@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import CustomError from "@/types/errors";
+import CustomError from "@/lib/types/errors";
 import { errorResponseHandler } from "@/lib/helpers";
 import { dbConnect, closeDbConnection } from "@/lib/clients/db";
 

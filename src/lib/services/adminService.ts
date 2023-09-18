@@ -1,6 +1,6 @@
-import CustomError from "@/types/errors";
-import Admin from "@/types/admins";
-import { HTTP_STATUS_CODE } from "@/types/consts";
+import CustomError from "@/lib/types/errors";
+import Admin from "@/lib/types/admins";
+import { HTTP_STATUS_CODE } from "@/lib/types/consts";
 
 export const _getAdminById = (id: string) => Admin.findById(id);
 

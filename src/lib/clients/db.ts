@@ -1,6 +1,6 @@
 import mongoose, { connect, disconnect } from "mongoose";
-import { HTTP_STATUS_CODE, MONGODB_URI } from "@/types/consts";
-import CustomError from "@/types/errors";
+import { HTTP_STATUS_CODE, MONGODB_URI } from "@/lib/types/consts";
+import CustomError from "@/lib/types/errors";
 
 let cachedDb: typeof mongoose;
 

@@ -1,6 +1,6 @@
-import CustomError from "@/types/errors";
+import CustomError from "@/lib/types/errors";
 import { errorResponseHandler } from "@/lib/helpers";
-import { userLogout } from "@/services/authService";
+import { userLogout } from "@/lib/services/authService";
 import { NextResponse } from "next/server";
 
 export const POST = async (req: Request) => {

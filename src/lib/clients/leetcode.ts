@@ -1,5 +1,5 @@
-import { API_ROUTES, HTTP_STATUS_CODE } from "@/types/consts";
-import CustomError from "@/types/errors";
+import { API_ROUTES, HTTP_STATUS_CODE } from "@/lib/types/consts";
+import CustomError from "@/lib/types/errors";
 
 export const fetchLeetcodeData = async (username: string) => {
   try {

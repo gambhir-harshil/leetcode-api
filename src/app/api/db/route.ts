@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { dbConnect } from "@/lib/clients/db";
-import CustomError from "@/types/errors";
+import CustomError from "@/lib/types/errors";
 import { errorResponseHandler } from "@/lib/helpers";
 
 export async function GET() {
