@@ -7,7 +7,7 @@ import {
   ReactNode,
 } from "react";
 import { loadState, removeState, saveState } from "@/lib/clients/localStorage";
-import { API_ROUTES } from "@/types/consts";
+import { API_ROUTES } from "@/lib/types/consts";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { httpFetch } from "@/lib/helpers";
@@ -30,7 +30,7 @@ export type LoginPayloadType = {
 };
 
 interface AuthContextType {
-  currentUser: User | null;
+  currentUser: any;
   registerUser: (inputs: RegisterPayloadType) => Promise<void>;
   login: (inputs: LoginPayloadType) => Promise<void>;
   logout: () => void;
@@ -53,9 +53,9 @@ interface AuthContextProviderProps {
 export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   children,
 }: AuthContextProviderProps) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(() => {
+  const [currentUser, setCurrentUser] = useState<any>(() => {
     const storedUser = loadState("user");
-    return storedUser ? JSON.parse(storedUser) : null;
+    return storedUser ? storedUser : null;
   });
   const router = useRouter();
 

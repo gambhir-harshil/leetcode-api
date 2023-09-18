@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
-import CustomError from "@/types/errors";
-import User, { IUser } from "@/types/users";
-import { HTTP_STATUS_CODE } from "../types/consts";
-import { RegisterPayload } from "@/types/auth";
+import CustomError from "@/lib/types/errors";
+import User, { IUser } from "@/lib/types/users";
+import { HTTP_STATUS_CODE } from "@/lib/types/consts";
+import { RegisterPayload } from "@/lib/types/auth";
 
 export const _hashPassword = (password: string) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(10));

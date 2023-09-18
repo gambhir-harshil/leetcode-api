@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { LEETCODE_GRAPHQL_URL } from "@/types/consts";
+import { LEETCODE_GRAPHQL_URL } from "@/lib/types/consts";
 import { errorResponseHandler } from "@/lib/helpers";
-import CustomError from "@/types/errors";
+import CustomError from "@/lib/types/errors";
 
 export async function GET(
   request: Request,

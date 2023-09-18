@@ -1,8 +1,8 @@
 import { dbConnect } from "@/lib/clients/db";
 import { NextResponse } from "next/server";
-import { login } from "@/services/authService";
+import { login } from "@/lib/services/authService";
 import { errorResponseHandler } from "@/lib/helpers";
-import CustomError from "@/types/errors";
+import CustomError from "@/lib/types/errors";
 
 export const POST = async (req: Request) => {
   try {

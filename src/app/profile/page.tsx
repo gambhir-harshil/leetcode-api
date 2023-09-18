@@ -1,3 +1,4 @@
+"use client";
 import { useAuth } from "@/context/authContext";
 import React from "react";
 
@@ -9,9 +10,8 @@ export default function ProfilePage(props: ProfilePageProps) {
   return (
     <>
       <div>My profile</div>
-      <p>username: {currentUser?.username}</p>
-      <p>id: {currentUser?.id}</p>
-      <p>email: {currentUser?.email}</p>
+      <p>username: {currentUser?.session?.user?.username}</p>
+      <p>email: {currentUser?.session?.user?.email}</p>
     </>
   );
 }

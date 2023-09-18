@@ -1,13 +1,13 @@
 import bcrypt from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import CustomError from "@/types/errors";
-import { HTTP_STATUS_CODE } from "@/types/consts";
-import { IUser, UserRO } from "@/types/users";
-import { LoginPayload, RegisterPayload } from "@/types/auth";
+import CustomError from "@/lib/types/errors";
+import { HTTP_STATUS_CODE } from "@/lib/types/consts";
+import { IUser, UserRO } from "@/lib/types/users";
+import { LoginPayload, RegisterPayload } from "@/lib/types/auth";
 import { findAdminByEmail } from "./adminService";
-import { GenericObject } from "@/types/model";
-import { AdminRO, IAdmin } from "@/types/admins";
+import { GenericObject } from "@/lib/types/model";
+import { AdminRO, IAdmin } from "@/lib/types/admins";
 import { createUser, findUserByEmail } from "./userService";
 import { getEnvVar } from "@/lib/helpers";
 

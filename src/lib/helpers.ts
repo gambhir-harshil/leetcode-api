@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
-import { HTTP_STATUS_CODE } from "../types/consts";
-import type CustomError from "../types/errors";
+import { HTTP_STATUS_CODE } from "@/lib/types/consts";
+import type CustomError from "@/lib/types/errors";
 
 type EnvVariableKey = "JWT_SECRET_KEY" | "JWT_EXPIRES_IN";
 

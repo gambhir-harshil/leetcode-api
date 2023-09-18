@@ -3,7 +3,7 @@ import * as Yup from "yup";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Loader from "@/components/Loader";
+import Loader from "../../components/Loader";
 import {
   LoginPayloadType,
   RegisterPayloadType,
