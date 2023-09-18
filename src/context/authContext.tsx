@@ -6,16 +6,34 @@ import {
   useContext,
   ReactNode,
 } from "react";
-import axios from "axios";
+import { loadState, removeState, saveState } from "@/lib/clients/localStorage";
+import { API_ROUTES } from "@/types/consts";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { httpFetch } from "@/lib/helpers";
 
 interface User {
-  id: number;
+  email: string;
   username: string;
 }
 
+export type RegisterPayloadType = {
+  username: string;
+  email: string;
+  password: string;
+  passwordConfirm?: string;
+};
+
+export type LoginPayloadType = {
+  email: string;
+  password: string;
+};
+
 interface AuthContextType {
   currentUser: User | null;
-  login: (inputs: { email: string; password: string }) => Promise<void>;
+  registerUser: (inputs: RegisterPayloadType) => Promise<void>;
+  login: (inputs: LoginPayloadType) => Promise<void>;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -36,37 +54,61 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   children,
 }: AuthContextProviderProps) => {
   const [currentUser, setCurrentUser] = useState<User | null>(() => {
-    const storedUser = localStorage.getItem("user");
+    const storedUser = loadState("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  const router = useRouter();
 
-  const login = async (inputs: { email: string; password: string }) => {
+  useEffect(() => {
+    if (currentUser !== null) {
+      saveState("user", currentUser);
+    } else {
+      removeState("user");
+    }
+  }, [currentUser]);
+
+  const registerUser = async (inputs: RegisterPayloadType) => {
+    delete inputs.passwordConfirm;
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await httpFetch(API_ROUTES.userRegister, "POST", inputs);
+      toast.success("Registered successfully");
+      setCurrentUser(res);
+      router.push("/leaderboard");
+    } catch (error: Error | any) {
+      toast.error("Register error: " + error.message);
+      console.error(error);
+    }
+  };
+
+  const login = async (inputs: LoginPayloadType) => {
+    try {
+      const res = await httpFetch(API_ROUTES.userLogin, "POST", inputs);
+      toast.success("Signed in successfully");
+      setCurrentUser(res);
+      router.push("/leaderboard");
+    } catch (error: Error | any) {
+      toast.error("Login error: " + error.message);
+      console.error(error);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      const res = await fetch(API_ROUTES.userLogout, {
         headers: { "content-type": "application/json" },
         method: "POST",
-        body: JSON.stringify(inputs),
+        body: JSON.stringify({}),
       });
-      const resJson = await res.json();
-      setCurrentUser(resJson);
+      setCurrentUser(null);
+      router.push("/login");
     } catch (error) {
       console.error("Login error:", error);
     }
   };
 
-  useEffect(() => {
-    if (currentUser !== null) {
-      localStorage.setItem("user", JSON.stringify(currentUser));
-    } else {
-      localStorage.removeItem("user");
-    }
-  }, [currentUser]);
-
   return (
-    <AuthContext.Provider value={{ currentUser, login }}>
+    <AuthContext.Provider value={{ currentUser, login, registerUser, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export default AuthContext;

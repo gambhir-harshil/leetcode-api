@@ -1,10 +1,13 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import Loader from "@/components/Loader";
+import { RegisterPayloadType, useAuth } from "@/context/authContext";
+import { useRouter } from "next/navigation";
 
-type Props = {};
-
-const RegisterForm = (props: Props) => {
+const RegisterForm = () => {
   const validationSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
     email: Yup.string().required("Email is required").email("Email is invalid"),
@@ -19,17 +22,17 @@ const RegisterForm = (props: Props) => {
   const formOptions = { resolver: yupResolver(validationSchema) };
 
   const { register, handleSubmit, reset, formState } = useForm(formOptions);
-  const { errors } = formState;
+  const { errors, isSubmitting } = formState;
 
-  const submitHandler = async (data: any) => {
-    const res = await fetch("/api/auth/register", {
-      headers: { "content-type": "application/json" },
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-    
-    if (res.ok) {
-        reset();
+  const { registerUser } = useAuth();
+  const router = useRouter();
+
+  const submitHandler = async (data: RegisterPayloadType) => {
+    try {
+      await registerUser(data);
+      router.push("/leaderboard");
+    } catch (error: any) {
+      console.error("error registering...", error, error?.response);
     }
   };
 
@@ -82,7 +85,7 @@ const RegisterForm = (props: Props) => {
         </label>
       </div>
       <button type="submit" className="auth__btn">
-        Register
+        Register {isSubmitting && <Loader color="white" size={13} />}
       </button>
     </form>
   );
