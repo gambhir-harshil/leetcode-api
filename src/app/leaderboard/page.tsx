@@ -1,28 +1,40 @@
 "use client";
-import UserData from "@/utils/userData";
+import { useAuth } from "@/context/authContext";
+import { fetchLeetcodeData } from "@/lib/clients/leetcode";
 import { useEffect, useState } from "react";
 
 function UserPage() {
   const [username, setUsername] = useState<string>("gambhir-harshil");
   const [userStats, setUserStats] = useState<any>(undefined);
-  const userData = new UserData();
+  const { logout } = useAuth();
+
+  async function fetchData(e?: any) {
+    e?.preventDefault();
+    const data = await fetchLeetcodeData(username);
+    setUserStats(data);
+  }
 
   useEffect(() => {
-    async function fetchData() {
-      const data = await userData.fetchLeetcodeData(username);
-      setUserStats(data);
-    }
     fetchData();
-  }, [username]); // eslint-disable-line
-
-  console.log(userStats);
+  }, []); // eslint-disable-line
 
   return (
-    <div>
+    <div className="p-5">
+      <form>
+        <label>Username: </label>
+        <input
+          type="text"
+          className="p-3 px-[2rem] m-5 border-b-2"
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <button type="submit" onClick={fetchData} />
+      </form>
       {userStats ? (
         <div>
           <h1>User: {userStats.username}</h1>
-          <h2>Submission Stats</h2>
+          <h2>
+            <b>Submission Stats</b>
+          </h2>
           <ul>
             {userStats.submitStats.acSubmissionNum.map(
               (stat: any, index: any) => (
@@ -33,6 +45,9 @@ function UserPage() {
               )
             )}
           </ul>
+          <br />
+          <br />
+          <button onClick={logout}>Logout</button>
         </div>
       ) : (
         <p>Loading...</p>

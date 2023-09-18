@@ -1,72 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getErrorRes } from "./lib/helpers";
-import { verifyJWT } from "./lib/token";
+import CustomError from "@/types/errors";
+import { verifyAccessToken } from "./services/authService";
+import { errorResponseHandler } from "./lib/helpers";
 
-let redirectToLogin = false;
-
-interface AuthenticatedRequest extends NextRequest {
-  user: {
-    id: string;
-  };
-}
-export const middleware = async (req: NextRequest) => {
-  let token: string | undefined;
-
-  console.log("intercepted");
-  if (req.cookies.has("token")) {
-    token = req.cookies.get("token")?.value;
-  } else if (req.headers.get("Authorization")?.startsWith("Bearer ")) {
-    token = req.headers.get("Authorization")?.substring(7);
-  }
-  console.log(req.nextUrl.pathname);
-
-  if (req.nextUrl.pathname.startsWith("/login") && (!token || redirectToLogin))
-    return;
-  if (
-    !token &&
-    (req.nextUrl.pathname.startsWith("/api/user") ||
-      req.nextUrl.pathname.startsWith("/api/auth/logout"))
-  ) {
-    return getErrorRes(
-      401,
-      "You are not logged in. Please provide a token to gain access"
-    );
-  }
-  const response = NextResponse.next();
+export async function middleware(req: NextRequest) {
   try {
-    if (token) {
-      const { sub } = await verifyJWT<{ sub: string }>(token);
-      response.headers.set("X-USER-ID", sub);
-      (req as AuthenticatedRequest).user = { id: sub };
-    }
-  } catch {
-    redirectToLogin = true;
-    if (req.nextUrl.pathname.startsWith("/api")) {
-      getErrorRes(401, "Token is invalid or user doesn't exist");
-    }
-    return NextResponse.redirect(
-      new URL(`login/${new URLSearchParams({ error: "badauth" })}`, req.url)
-    );
-  }
-  const authUser = (req as AuthenticatedRequest).user;
-  if (!authUser) {
-    return NextResponse.redirect(
-      new URL(
-        `login/${new URLSearchParams({
-          error: "badauth",
-          forceLogin: "true",
-        })}`,
-        req.url
-      )
-    );
-  }
+    const href = req.nextUrl.href;
+    if (href.includes("/leaderboard")) {
+      if (!req.cookies.has("session")) {
+        return NextResponse.redirect(new URL("login", req.url));
+      }
 
-  if (req.url.includes("login") && authUser) {
-    return NextResponse.redirect(new URL("profile", req.url));
-  }
-  return response;
-};
+      const accessToken = req.cookies.get("session")?.value;
+      const { payload } = await verifyAccessToken(accessToken as string);
+      console.log("passport...", payload);
+      req.cookies.set("passport", JSON.stringify(payload));
+    }
 
-export const config = {
-  matcher: ["/profile", "/login", "/api/user/:path*", "/api/auth/logout"],
-};
+    return NextResponse.next();
+  } catch (error) {
+    return errorResponseHandler(error as CustomError);
+  }
+}

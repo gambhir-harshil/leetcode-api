@@ -1,15 +1,12 @@
-import { dbConnect } from "@/lib/clients/db";
 import { NextResponse } from "next/server";
-import type CustomError from "@/types/errors";
-import { getUserById } from "@/services/userService";
+import CustomError from "@/types/errors";
 import { errorResponseHandler } from "@/lib/helpers";
+import { dbConnect } from "@/lib/clients/db";
 
 export async function GET(req: Request) {
   try {
     await dbConnect();
-    const user = await getUserById("xxx");
-
-    return NextResponse.json({ user });
+    return NextResponse.json({});
   } catch (error) {
     return errorResponseHandler(error as CustomError);
   }
