@@ -9,6 +9,7 @@ import {
   RegisterPayloadType,
   useAuth,
 } from "@/context/authContext";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const validationSchema = Yup.object().shape({
@@ -23,9 +24,12 @@ export default function Login() {
 
   const { login } = useAuth();
 
+  const router = useRouter();
+
   const submitHandler = async (data: LoginPayloadType) => {
     try {
       await login(data);
+      router.push('/leaderboard');
     } catch (err) {
       console.log(err);
     }

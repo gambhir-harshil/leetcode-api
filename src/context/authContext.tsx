@@ -73,6 +73,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       const res = await httpFetch(API_ROUTES.userRegister, "POST", inputs);
       toast.success("Registered successfully");
       setCurrentUser(res);
+      console.log("regsitered succesfully!")
       router.push("/leaderboard");
     } catch (error: Error | any) {
       toast.error("Register error: " + error.message);
@@ -85,6 +86,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       const res = await httpFetch(API_ROUTES.userLogin, "POST", inputs);
       toast.success("Signed in successfully");
       setCurrentUser(res);
+      console.log("login succesful!")
       router.push("/leaderboard");
     } catch (error: Error | any) {
       toast.error("Login error: " + error.message);
@@ -100,6 +102,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
         body: JSON.stringify({}),
       });
       setCurrentUser(null);
+      console.log("logout")
       router.push("/login");
     } catch (error) {
       console.error("Login error:", error);
