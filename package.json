@@ -42,5 +42,18 @@
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "@typescript-eslint/parser": "^5.62.0"
-  }
+  },
+  "description": "-  **Login and Regsiter pages**\r     - [ ] Design the UI\r -  **Home Page**\r     - [ ]  Home Page with all the stats of the user.\r     - [ ]  A sidebar component of leaderboard.\r     - [ ]  A chart showing the trends of the number of submissions made by the user in the past 10 days.\r     - [ ]  Navbar having the links for Practice and Leaderboard section. (Navbar would be same throughout the application)\r - **Leader Board**\r     - [ ]  A leaderboard table with with just the rank and number of easy, medium, hard questions and a heatgraph for 10 days\r     - [ ]  Rest of the user stats will be available on the user-stats page (home page for now)\r - **Game UI**\r     - [ ]  The UI with levels and popups linked to docs\r     - [ ]  UI for each level\r - ************Level UI************\r     - [ ]  A sidebar component showing Friend’s progress (not discussed yet, could be scrapped)\r     - [ ]  Related topics to the question.\r     - [ ]  Best Time and space complexity for the problem.\r - [ ]  **Admin panel**\r - [ ]  Mobile Design",
+  "main": "next.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gambhir-harshil/leetcode-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gambhir-harshil/leetcode-api/issues"
+  },
+  "homepage": "https://github.com/gambhir-harshil/leetcode-api#readme"
 }
