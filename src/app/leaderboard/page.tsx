@@ -1,12 +1,19 @@
 "use client";
 import { useAuth } from "@/context/authContext";
 import { fetchLeetcodeData } from "@/lib/clients/leetcode";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function UserPage() {
   const [username, setUsername] = useState<string>("gambhir-harshil");
   const [userStats, setUserStats] = useState<any>(undefined);
-  const { logout } = useAuth();
+  const { apiLogout } = useAuth();
+  const router = useRouter();
+
+  const userLogout = async () => {
+    await apiLogout();
+    router.push("/login");
+  };
 
   async function fetchData(e?: any) {
     e?.preventDefault();
@@ -47,7 +54,7 @@ function UserPage() {
           </ul>
           <br />
           <br />
-          <button onClick={logout}>Logout</button>
+          <button onClick={userLogout}>Logout</button>
         </div>
       ) : (
         <p>Loading...</p>
