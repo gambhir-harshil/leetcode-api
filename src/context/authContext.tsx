@@ -12,11 +12,6 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { httpFetch } from "@/lib/helpers";
 
-interface User {
-  email: string;
-  username: string;
-}
-
 export type RegisterPayloadType = {
   username: string;
   email: string;
@@ -31,9 +26,11 @@ export type LoginPayloadType = {
 
 interface AuthContextType {
   currentUser: any;
-  registerUser: (inputs: RegisterPayloadType) => Promise<void>;
-  login: (inputs: LoginPayloadType) => Promise<void>;
-  logout: () => void;
+  apiAuthenticate: (
+    scope: string,
+    inputs: RegisterPayloadType | LoginPayloadType
+  ) => Promise<any> | undefined;
+  apiLogout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -67,34 +64,25 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     }
   }, [currentUser]);
 
-  const registerUser = async (inputs: RegisterPayloadType) => {
-    delete inputs.passwordConfirm;
+  const apiAuthenticate = async (
+    scope: string,
+    inputs: RegisterPayloadType | LoginPayloadType
+  ) => {
+    delete (inputs as RegisterPayloadType).passwordConfirm;
     try {
-      const res = await httpFetch(API_ROUTES.userRegister, "POST", inputs);
-      toast.success("Registered successfully");
+      const res = await httpFetch((API_ROUTES as any)[scope], "POST", inputs);
+      toast.success("Authenticated successfully!");
       setCurrentUser(res);
-      router.push("/leaderboard");
+      router.push("/leaderboard?justAuthenticated=true");
     } catch (error: Error | any) {
-      toast.error("Register error: " + error.message);
+      toast.error("Error Authenticating: " + error.message);
       console.error(error);
     }
   };
 
-  const login = async (inputs: LoginPayloadType) => {
+  const apiLogout = async () => {
     try {
-      const res = await httpFetch(API_ROUTES.userLogin, "POST", inputs);
-      toast.success("Signed in successfully");
-      setCurrentUser(res);
-      router.push("/leaderboard");
-    } catch (error: Error | any) {
-      toast.error("Login error: " + error.message);
-      console.error(error);
-    }
-  };
-
-  const logout = async () => {
-    try {
-      const res = await fetch(API_ROUTES.userLogout, {
+      await fetch(API_ROUTES.userLogout, {
         headers: { "content-type": "application/json" },
         method: "POST",
         body: JSON.stringify({}),
@@ -107,7 +95,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, login, registerUser, logout }}>
+    <AuthContext.Provider value={{ currentUser, apiAuthenticate, apiLogout }}>
       {children}
     </AuthContext.Provider>
   );

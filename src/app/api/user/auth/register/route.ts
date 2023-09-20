@@ -14,7 +14,6 @@ export async function POST(req: Request) {
       { status: 201 }
     );
   } catch (error) {
-    console.log("register error but still redirects why?");
     return errorResponseHandler(error as CustomError);
   }
 }

@@ -5,7 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Loader from "../../components/Loader";
 import { RegisterPayloadType, useAuth } from "@/context/authContext";
-import { useRouter } from "next/navigation";
 
 const RegisterForm = () => {
   const validationSchema = Yup.object().shape({
@@ -24,13 +23,11 @@ const RegisterForm = () => {
   const { register, handleSubmit, reset, formState } = useForm(formOptions);
   const { errors, isSubmitting } = formState;
 
-  const { registerUser } = useAuth();
-  const router = useRouter();
+  const { apiAuthenticate } = useAuth();
 
   const submitHandler = async (data: RegisterPayloadType) => {
     try {
-      await registerUser(data);
-      router.push("/leaderboard");
+      await apiAuthenticate("userRegister", data);
     } catch (error: any) {
       console.error("error registering...", error, error?.response);
     }

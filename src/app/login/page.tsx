@@ -4,11 +4,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Loader from "../../components/Loader";
-import {
-  LoginPayloadType,
-  RegisterPayloadType,
-  useAuth,
-} from "@/context/authContext";
+import { LoginPayloadType, useAuth } from "@/context/authContext";
 
 export default function Login() {
   const validationSchema = Yup.object().shape({
@@ -18,14 +14,14 @@ export default function Login() {
 
   const formOptions = { resolver: yupResolver(validationSchema) };
 
-  const { register, handleSubmit, reset, formState } = useForm(formOptions);
+  const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors, isSubmitting } = formState;
 
-  const { login } = useAuth();
+  const { apiAuthenticate } = useAuth();
 
   const submitHandler = async (data: LoginPayloadType) => {
     try {
-      await login(data);
+      await apiAuthenticate("userLogin", data);
     } catch (err) {
       console.log(err);
     }

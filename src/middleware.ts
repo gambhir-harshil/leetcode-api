@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import CustomError from "@/lib/types/errors";
-import { verifyAccessToken } from "@/lib/services/authService";
 import { errorResponseHandler } from "@/lib/helpers";
 import { verifyJWT } from "./lib/token";
 
 export async function middleware(req: NextRequest) {
   try {
-    const href = req.nextUrl.href;
-    if (href.includes("/leaderboard") || href.includes("/profile")) {
+    const url = req.nextUrl;
+    if (url.href.includes("/leaderboard") || url.href.includes("/profile")) {
       if (!req.cookies.has("session")) {
+        if (url.searchParams.get("justAuthenticated"))
+          return NextResponse.next();
         return NextResponse.redirect(new URL("login", req.url));
       }
       const accessToken = req.cookies.get("session")?.value;
