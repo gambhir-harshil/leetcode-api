@@ -1,5 +1,5 @@
 import { connect, Schema, models, model } from "mongoose";
-import { IUser } from "./types";
+import { ISubmissions, IUser } from "./types";
 
 const { MONGODB_URI } = process.env;
 
@@ -28,7 +28,30 @@ export const dbConnect = async () => {
     { timestamps: true }
   );
 
-  const User = models.User || model<IUser>("User", UserSchema);
+  const SubmissionSchema = new Schema<ISubmissions>(
+    {
+      username: {
+        type: String,
+        required: true,
+      },
+      easy_solved: {
+        type: Number,
+        required: true
+      },
+      medium_solved: {
+        type: Number,
+        required: true,
+      },
+      hard_solved: {
+        type: Number,
+        required: true,
+      }
+    },
+    { timestamps: true }
+  );
 
-  return { conn, User };
+  const User = models.User || model<IUser>("User", UserSchema);
+  const Submission = models.Submission || model<ISubmissions>("Submission", SubmissionSchema);
+
+  return { conn, User, Submission };
 };

@@ -12,3 +12,10 @@ export interface IUser extends Document {
   password: string;
   email: string;
 }
+
+export interface ISubmissions extends Document {
+    username: string;
+    easy_solved: number;
+    medium_solved: number;
+    hard_solved: number;
+}
