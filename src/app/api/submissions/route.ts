@@ -21,7 +21,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         }
 
         const conn  = await dbConnect();
-        const newSubmission = Submission.create({
+        await conn;
+        const newSubmission = await Submission.create({
             username: newData.data.matchedUser.username,
             easy_solved: newData.data.matchedUser.submitStats.acSubmissionNum[1].count,
             medium_solved: newData.data.matchedUser.submitStats.acSubmissionNum[2].count,
@@ -29,12 +30,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
         });
 
 
-        await conn;
-        // const submission = await newSubmission.save();
-        // console.log(submission);
+        // const submission = await newSubmission.create();
+        console.log(newSubmission);
 
         return NextResponse.json(
-            // { msg: "success", username: username, submission_id: submission._id },
+            { msg: "success", username: username, submission_id: newSubmission._id },
             { status: 201 }
         );
 
