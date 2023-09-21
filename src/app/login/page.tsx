@@ -1,34 +1,32 @@
 "use client";
+import * as Yup from "yup";
 import Link from "next/link";
-import React, { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Loader from "../../components/Loader";
+import { LoginPayloadType, useAuth } from "@/context/authContext";
 
-type Props = {};
+export default function Login() {
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().required("Email is required").email("Email is invalid"),
+    password: Yup.string().required("Password is required"),
+  });
 
-const Login = (props: Props) => {
-  const [inputs, setInputs] = useState({
-    email: "",
-    password: ""
-  })
+  const formOptions = { resolver: yupResolver(validationSchema) };
 
-   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
+  const { register, handleSubmit, formState } = useForm(formOptions);
+  const { errors, isSubmitting } = formState;
 
-  const submitHandler = async (e: any) => {
-    e.preventDefault();
-    console.log(inputs);
+  const { apiAuthenticate } = useAuth();
+
+  const submitHandler = async (data: LoginPayloadType) => {
     try {
-      const res = await fetch("/api/auth/login", {
-        headers: { "content-type": "application/json" },
-        method: "POST",
-        body: JSON.stringify(inputs),
-      });
-      const resJson = await res.json();
-    } catch(err) {
+      await apiAuthenticate("userLogin", data);
+    } catch (err) {
       console.log(err);
     }
   };
-  
+
   return (
     <div className="auth bg-loginSpace">
       <div className="auth__backdrop">
@@ -36,22 +34,23 @@ const Login = (props: Props) => {
           <h1 className="auth__heading">Welcome back!</h1>
           <form
             action="submit"
+            onSubmit={handleSubmit(submitHandler)}
             className="register__form flex flex-col mt-4 gap-4"
           >
             <input
               className="auth__input"
               type="text"
               placeholder="Email"
-              name="email"
-              onChange={handleChange}
+              {...register("email")}
             />
+            <span className="auth__error">{errors.email?.message}</span>
             <input
               className="auth__input"
               type="password"
               placeholder="Password"
-              name="password"
-              onChange={handleChange}
+              {...register("password")}
             />
+            <span className="auth__error">{errors.password?.message}</span>
             <div className="flex justify-between h-12">
               <div className="flex items-end gap-2">
                 <input
@@ -70,15 +69,18 @@ const Login = (props: Props) => {
                 <span className="text-[#2972FF] text-sm">Forgot password?</span>
               </div>
             </div>
-            <button onClick={submitHandler} className="auth__btn">Login</button>
+            <button type="submit" className="auth__btn">
+              Login {isSubmitting && <Loader color="white" size={13} />}
+            </button>
           </form>
         </div>
         <p className="text-gray-400 text-center">
-          Not a Member? <Link href={'/register'} className="text-[#2972FF] font-[500]">Register</Link>
+          Not a Member?{" "}
+          <Link href={"/register"} className="text-[#2972FF] font-[500]">
+            Register
+          </Link>
         </p>
       </div>
     </div>
   );
-};
-
-export default Login;
+}

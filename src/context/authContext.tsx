@@ -6,16 +6,31 @@ import {
   useContext,
   ReactNode,
 } from "react";
-import axios from "axios";
+import { loadState, removeState, saveState } from "@/lib/clients/localStorage";
+import { API_ROUTES } from "@/lib/types/consts";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { httpFetch } from "@/lib/helpers";
 
-interface User {
-  id: number;
+export type RegisterPayloadType = {
   username: string;
-}
+  email: string;
+  password: string;
+  passwordConfirm?: string;
+};
+
+export type LoginPayloadType = {
+  email: string;
+  password: string;
+};
 
 interface AuthContextType {
-  currentUser: User | null;
-  login: (inputs: { email: string; password: string }) => Promise<void>;
+  currentUser: any;
+  apiAuthenticate: (
+    scope: string,
+    inputs: RegisterPayloadType | LoginPayloadType
+  ) => Promise<any> | undefined;
+  apiLogout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,38 +50,53 @@ interface AuthContextProviderProps {
 export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   children,
 }: AuthContextProviderProps) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
+  const [currentUser, setCurrentUser] = useState<any>(() => {
+    const storedUser = loadState("user");
+    return storedUser ? storedUser : null;
   });
+  const router = useRouter();
 
-  const login = async (inputs: { email: string; password: string }) => {
+  useEffect(() => {
+    if (currentUser !== null) {
+      saveState("user", currentUser);
+    } else {
+      removeState("user");
+    }
+  }, [currentUser]);
+
+  const apiAuthenticate = async (
+    scope: string,
+    inputs: RegisterPayloadType | LoginPayloadType
+  ) => {
+    delete (inputs as RegisterPayloadType).passwordConfirm;
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await httpFetch((API_ROUTES as any)[scope], "POST", inputs);
+      toast.success("Authenticated successfully!");
+      setCurrentUser(res);
+      router.push("/leaderboard?justAuthenticated=true");
+    } catch (error: Error | any) {
+      toast.error("Error Authenticating: " + error.message);
+      console.error(error);
+    }
+  };
+
+  const apiLogout = async () => {
+    try {
+      await fetch(API_ROUTES.userLogout, {
         headers: { "content-type": "application/json" },
         method: "POST",
-        body: JSON.stringify(inputs),
+        body: JSON.stringify({}),
       });
-      const resJson = await res.json();
-      setCurrentUser(resJson);
+      setCurrentUser(null);
+      router.push("/login");
     } catch (error) {
       console.error("Login error:", error);
     }
   };
 
-  useEffect(() => {
-    if (currentUser !== null) {
-      localStorage.setItem("user", JSON.stringify(currentUser));
-    } else {
-      localStorage.removeItem("user");
-    }
-  }, [currentUser]);
-
   return (
-    <AuthContext.Provider value={{ currentUser, login }}>
+    <AuthContext.Provider value={{ currentUser, apiAuthenticate, apiLogout }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export default AuthContext;

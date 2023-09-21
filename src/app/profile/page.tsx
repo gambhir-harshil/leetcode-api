@@ -1,11 +1,17 @@
-import React from 'react'
+"use client";
+import { useAuth } from "@/context/authContext";
+import React from "react";
 
-type Props = {}
+type ProfilePageProps = {};
 
-const page = (props: Props) => {
+export default function ProfilePage(props: ProfilePageProps) {
+  const { currentUser } = useAuth();
+
   return (
-    <div>page</div>
-  )
+    <>
+      <div>My profile</div>
+      <p>username: {currentUser?.session?.user?.username}</p>
+      <p>email: {currentUser?.session?.user?.email}</p>
+    </>
+  );
 }
-
-export default page
