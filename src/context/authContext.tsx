@@ -70,7 +70,11 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   ) => {
     delete (inputs as RegisterPayloadType).passwordConfirm;
     try {
-      const res = await httpFetch((API_ROUTES as any)[scope], "POST", inputs);
+      const res = await httpFetch(
+        (API_ROUTES as any)[scope].url,
+        "POST",
+        inputs
+      );
       toast.success("Authenticated successfully!");
       setCurrentUser(res);
       router.push("/leaderboard?justAuthenticated=true");
@@ -82,7 +86,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
 
   const apiLogout = async () => {
     try {
-      await fetch(API_ROUTES.userLogout, {
+      await fetch(API_ROUTES.userLogout.url, {
         headers: { "content-type": "application/json" },
         method: "POST",
         body: JSON.stringify({}),

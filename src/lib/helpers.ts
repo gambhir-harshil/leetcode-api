@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
 import { HTTP_STATUS_CODE } from "@/lib/types/consts";
-import type CustomError from "@/lib/types/errors";
+import CustomError from "@/lib/types/errors";
 
 type EnvVariableKey = "JWT_SECRET_KEY" | "JWT_EXPIRES_IN";
 
@@ -37,18 +37,24 @@ export function errorResponseHandler(error: CustomError) {
   );
 }
 
-export async function httpFetch(route: string, method: string, data: any) {
+export async function httpFetch(route: string, method: string, data?: any) {
   const response = await fetch(route, {
     headers: { "content-type": "application/json" },
     method,
-    body: JSON.stringify(data),
+    body: data && JSON.stringify(data),
   });
 
   const res = await response.json();
 
   if (!response.ok) {
-    throw new Error(res.message);
+    throw new HttpFetchRequestError(res.message, res.status, res.stack);
   }
 
   return res;
+}
+
+class HttpFetchRequestError extends CustomError {
+  constructor(errorMessage: string, status: number, innerError: any) {
+    super(errorMessage, status, innerError);
+  }
 }

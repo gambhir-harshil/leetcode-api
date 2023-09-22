@@ -1,75 +1,33 @@
-import { NextRequest, NextResponse } from "next/server";
-import { SubmissionSchema } from "@/lib/validations/submissionSchema";
-import UserData from "@/utils/userData";
-import { dbConnect } from "@/utils/db";
-import { ZodError } from "zod";
-import { getErrorRes } from "@/lib/helpers";
-import { LEETCODE_GRAPHQL_URL } from "@/utils/consts";
+import { type NextRequest, NextResponse } from "next/server";
+import { dbConnect } from "@/lib/clients/db";
+import { fetchLeetcodeData } from "@/lib/clients/leetcode";
+import { errorResponseHandler } from "@/lib/helpers";
+import type CustomError from "@/lib/types/errors";
+import { createSubmission } from "@/lib/services/submissionService";
+import { HTTP_STATUS_CODE } from "@/lib/types/consts";
 
-export async function POST(req: NextRequest, res: NextResponse) {
-    console.log("POST submissions");
-    try {
-        const body = await req.json();
-        let username: string = body.username;
-        console.log(body);
+// this should a protected route
+// passport to be passed from middlware
+export async function POST(request: NextRequest) {
+  try {
+    await dbConnect();
+    const { username } = await request.json();
+    const leetcodeData: any = await fetchLeetcodeData(username);
 
-        const opts = {
-            method: "POST",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({
-                query: `
-              { matchedUser(username: "${username}") {
-                username
-                submitStats: submitStatsGlobal {
-                  acSubmissionNum {
-                    difficulty
-                    count
-                    submissions
-                  }
-                  totalSubmissionNum {
-                    difficulty
-                    count
-                    submissions
-                  }
-                }
-              }
-            }`,
-            }),
-        };
-        
-        const response = await fetch(`${LEETCODE_GRAPHQL_URL}/${username}`, opts);
-        const newData = await response.json();
+    const payload = {
+      username: leetcodeData.username,
+      easy_solved: leetcodeData.easy,
+      medium_solved: leetcodeData.medium,
+      hard_solved: leetcodeData.hard,
+    };
 
-        // could be my problem here, the newData variablle isn't finished yet
-        if (!newData) {
-            return getErrorRes(500, "Failed to fetch Leetcode data");
-        }
+    const submission = await createSubmission(payload);
 
-        const { conn, Submission } = await dbConnect();
-        const newSubmission = new Submission({
-            username: newData.data.matchedUser.username,
-            easy_solved: newData.data.matchedUser.submitStats.acSubmissionNum[1].count,
-            medium_solved: newData.data.matchedUser.submitStats.acSubmissionNum[2].count,
-            hard_solved: newData.data.matchedUser.submitStats.acSubmissionNum[3].count,
-        });
-
-
-        await conn;
-        const submission = await newSubmission.save();
-        // console.log(submission);
-
-        return NextResponse.json(
-            { msg: "success", username: username, submission_id: submission._id }, 
-            { status: 201 }
-        );
-
-    } catch (err: any) {
-        if (err instanceof ZodError) {
-            return getErrorRes(400, "Validations failed", err);
-        }
-        if (err.code === "P2002") { // figure this out
-            return getErrorRes(409, "lasifasfhdsafadsf?");
-        }
-        return getErrorRes(500, err.message);
-    }
+    return NextResponse.json(
+      { msg: "success", submission },
+      { status: HTTP_STATUS_CODE.CREATED }
+    );
+  } catch (error: any | CustomError) {
+    return errorResponseHandler(error);
+  }
 }
