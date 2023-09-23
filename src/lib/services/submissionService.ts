@@ -29,7 +29,8 @@ export const updateSubmission = async (payload: any) => {
         username: payload.username
     }
 
-    const options = { new: true }
+    //probably needs to be false to calculate the difference
+    const options = { new: false }
 
     return await Submission.findOneAndUpdate(conditions, payload, options)
 };
