@@ -39,6 +39,7 @@ export const HTTP_STATUS_CODE = {
   UNAUTHORISED: 401,
   CREATED: 201,
   FOUND: 200,
+  CONFLICT: 409,
 };
 
 export const ROLES = {

@@ -2,12 +2,15 @@ import { HTTP_STATUS_CODE } from "../types/consts";
 import CustomError from "../types/errors";
 import DailyProgress, { DailyProgressPayload } from "../types/daily";
 
-const _getDailyProgressById = (id: string) => DailyProgress.findById(id);
+const _getDailyProgressByUsername = (query: any) => DailyProgress.find(query);
 
-export const findDailyProgressById = async (id: string) => {
-    const dailyProgress = await _getDailyProgressById(id);
+export const findDailyProgressByUsername = async (username: string) => {
+    const query = {
+        username: username
+    }
+    const dailyProgress = await _getDailyProgressByUsername(query);
 
-    if (!dailyProgress) throw new DailyProgressNotFoundError(id);
+    if (!dailyProgress) throw new DailyProgressNotFoundError(username);
 
     return dailyProgress;
 };
@@ -37,8 +40,14 @@ export const createOrUpdateDailyProgress = async (payload: any) => {
         return await DailyProgress.findOneAndUpdate(query, {
             $inc: {
                 easy_solved: payload.easy_solved,
+                easy_submitted: payload.easy_submitted,
                 medium_solved: payload.medium_solved,
+                medium_submitted: payload.medium_submitted,
                 hard_solved: payload.hard_solved,
+                hard_submitted: payload.hard_submitted,
+                total_solved: payload.total_solved,
+                total_submitted: payload.total_submitted,
+                score: payload.score,
             }
         }, options); // $inc is to increment each field, i am hoping this works
 
@@ -51,7 +60,7 @@ export const createOrUpdateDailyProgress = async (payload: any) => {
 export const deleteDailyProgress = () => { };
 
 class DailyProgressNotFoundError extends CustomError {
-    constructor(id: string) {
-        super(`DailyProgress with id: ${id} not found`, HTTP_STATUS_CODE.NOT_FOUND);
+    constructor(username: string) {
+        super(`DailyProgress with username: ${username} not found`, HTTP_STATUS_CODE.NOT_FOUND);
     }
 }

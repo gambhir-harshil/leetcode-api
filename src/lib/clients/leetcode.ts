@@ -18,10 +18,14 @@ export const fetchLeetcodeData = async (username: string) => {
 
     return {
       username: matchedUser.username as string,
-      easy: matchedUser.submitStats.acSubmissionNum[1].count,
-      medium: matchedUser.submitStats.acSubmissionNum[2].count,
-      hard: matchedUser.submitStats.acSubmissionNum[3].count,
-      totalSolved: matchedUser.submitStats.acSubmissionNum[0].count,
+      easy_solved: matchedUser.submitStats.acSubmissionNum[1].count,
+      easy_submitted: matchedUser.submitStats.acSubmissionNum[1].submissions,
+      medium_solved: matchedUser.submitStats.acSubmissionNum[2].count,
+      medium_submitted: matchedUser.submitStats.acSubmissionNum[2].submissions,
+      hard_solved: matchedUser.submitStats.acSubmissionNum[3].count,
+      hard_submitted: matchedUser.submitStats.acSubmissionNum[3].submissions,
+      total_solved: matchedUser.submitStats.acSubmissionNum[0].count,
+      total_submitted: matchedUser.submitStats.acSubmissionNum[0].submissions,
       submitStats: matchedUser.submitStats,
     };
   } catch (error) {

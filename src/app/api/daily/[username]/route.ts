@@ -3,15 +3,18 @@ import { dbConnect } from "@/lib/clients/db";
 import { errorResponseHandler } from "@/lib/helpers";
 import type CustomError from "@/lib/types/errors";
 import { HTTP_STATUS_CODE } from "@/lib/types/consts";
-import { updateSubmissionsCron } from "@/lib/services/cron";
+import { findDailyProgressByUsername } from "@/lib/services/dailyProgressService";
 
-// this should a protected route
-// passport to be passed from middlware
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest, context: {
+    params: {
+        username: string
+    }
+}) {
     try {
         await dbConnect();
 
-        const result = await updateSubmissionsCron();
+        const username: string  = context.params.username;
+        const result = await findDailyProgressByUsername(username);
 
         return NextResponse.json(
             { msg: "success", result },

@@ -2,22 +2,41 @@ import { HTTP_STATUS_CODE } from "../types/consts";
 import CustomError from "../types/errors";
 import Submission, { SubmissionPayload } from "../types/submissions";
 
-const _getSubmissionById = (id: string) => Submission.findById(id);
+const _getSubmissionByUsername = (query: any) => Submission.find(query);
 
-export const findSubmissionById = async (id: string) => {
-  const submission = await _getSubmissionById(id);
+const _checkSubmissionByUsername = (query: any) => Submission.findOne(query);
 
-  if (!submission) throw new SubmissionNotFoundError(id);
+export const findSubmissionByUsername = async (username: string) => {
 
-  return submission;
+    const query = { username: username }
+    const submission = await _getSubmissionByUsername(query);
+
+    if (!submission) throw new SubmissionNotFoundError(username);
+
+    return submission;
 };
 
+export const createUserScore = async (payload: any) => {
+    let score: number = payload.easy_solved * 0.3 + payload.medium_solved * 0.6 + payload.hard_solved * 1;
+    return score;
+}
+
 export const createSubmission = async (payload: any) => {
-  payload = new SubmissionPayload(payload);
+    try {
+        payload = new SubmissionPayload(payload);
 
-  await Submission.validate(payload);
+        await Submission.validate(payload);
 
-  return await Submission.create(payload);
+        const existingSubmission = await _checkSubmissionByUsername({ username: payload.username });
+
+        if (existingSubmission) {
+            throw new SubmissionExistsError(payload.username);
+        }
+
+        return await Submission.create(payload);
+    } catch (error: any | CustomError) {
+        throw error;
+    }
 };
 
 export const updateSubmission = async (payload: any) => {
@@ -29,16 +48,21 @@ export const updateSubmission = async (payload: any) => {
         username: payload.username
     }
 
-    //probably needs to be false to calculate the difference
+    //needs to be false to calculate the difference
     const options = { new: false }
 
     return await Submission.findOneAndUpdate(conditions, payload, options)
 };
 
-export const deleteSubmission = () => {};
+export const deleteSubmission = () => { };
 
+class SubmissionExistsError extends CustomError {
+    constructor(username: string) {
+        super(`Submission with username: ${username} already exists.`, HTTP_STATUS_CODE.CONFLICT);
+    }
+}
 class SubmissionNotFoundError extends CustomError {
-  constructor(id: string) {
-    super(`Submission with id: ${id} not found`, HTTP_STATUS_CODE.NOT_FOUND);
-  }
+    constructor(username: string) {
+        super(`Submission with username: ${username} not found`, HTTP_STATUS_CODE.NOT_FOUND);
+    }
 }

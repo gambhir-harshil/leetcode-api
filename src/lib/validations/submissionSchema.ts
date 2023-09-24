@@ -11,12 +11,37 @@ export const SubmissionSchema = z.object({
       required_error: "Number is required",
     })
     .min(0, "Positive number required"),
+  easy_submitted: z
+    .number({
+      required_error: "Number is required",
+    })
+    .min(0, "Positive number required"),
   medium_solved: z
     .number({
       required_error: "Number is required",
     })
     .min(0, "Positive number required"),
+  medium_submitted: z
+    .number({
+      required_error: "Number is required",
+    })
+    .min(0, "Positive number required"),
   hard_solved: z
+    .number({
+      required_error: "Number is required",
+    })
+    .min(0, "Positive number required"),
+  hard_submitted: z
+    .number({
+      required_error: "Number is required",
+    })
+    .min(0, "Positive number required"),
+  total_solved: z
+    .number({
+      required_error: "Number is required",
+    })
+    .min(0, "Positive number required"),
+  total_submitted: z
     .number({
       required_error: "Number is required",
     })
