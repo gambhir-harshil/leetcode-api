@@ -2,20 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import CustomError from "@/lib/types/errors";
 import { errorResponseHandler } from "@/lib/helpers";
 import { verifyJWT } from "./lib/token";
+import { request } from "http";
 
-export async function middleware(req: NextRequest) {
+export async function middleware(request: NextRequest) {
   try {
-    const url = req.nextUrl;
+    const url = request.nextUrl;
     if (url.href.includes("/leaderboard") || url.href.includes("/profile")) {
-      if (!req.cookies.has("session")) {
+      if (!request.cookies.has("session")) {
         if (url.searchParams.get("justAuthenticated"))
           return NextResponse.next();
-        return NextResponse.redirect(new URL("login", req.url));
+        return NextResponse.redirect(new URL("login", request.url));
       }
-      const accessToken = req.cookies.get("session")?.value;
+      const accessToken = request.cookies.get("session")?.value;
       const { sub } = await verifyJWT<{ sub: string }>(accessToken as string);
       console.log("passport...", sub);
-      req.cookies.set("passport", JSON.stringify(sub));
     }
     return NextResponse.next();
   } catch (error) {

@@ -23,7 +23,7 @@ export default function Login() {
     try {
       await apiAuthenticate("userLogin", data);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 

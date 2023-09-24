@@ -1,50 +1,33 @@
-import { API_ROUTES, HTTP_STATUS_CODE } from "@/lib/types/consts";
+import {
+  HTTP_STATUS_CODE,
+  LEETCODE_GRAPHQL_QUERY,
+  LEETCODE_GRAPHQL_URL,
+} from "@/lib/types/consts";
 import CustomError from "@/lib/types/errors";
+import { httpFetch } from "@/lib/helpers";
 
 export const fetchLeetcodeData = async (username: string) => {
   try {
-    const self: any = {};
-    const response = await fetch(`${API_ROUTES.leetcode}/${username}`);
+    const data = {
+      query: LEETCODE_GRAPHQL_QUERY(username),
+    };
+
     const {
-      resp: {
-        data: { matchedUser },
-      },
-    } = await response.json();
+      data: { matchedUser },
+    } = await httpFetch(LEETCODE_GRAPHQL_URL, "POST", data);
 
-    self.username = matchedUser.username;
-    self.totalSolved = matchedUser.submitStats.acSubmissionNum[0].count;
-    self.easy = matchedUser.submitStats.acSubmissionNum[1].count;
-    self.medium = matchedUser.submitStats.acSubmissionNum[2].count;
-    self.hard = matchedUser.submitStats.acSubmissionNum[3].count;
-    self._goodSubmissions =
-      matchedUser.submitStats.acSubmissionNum[0].submissions;
-    self._totalSubmissions =
-      matchedUser.submitStats.totalSubmissionNum[0].submissions;
-    self.acceptanceRate = self._goodSubmissions
-      ? Number(
-          ((self._goodSubmissions / self._totalSubmissions) * 100).toFixed(2)
-        )
-      : 0;
-    self.rank = matchedUser.profile.ranking;
-    self.calendar = matchedUser.submissionCalendar;
-    self.submissionCalendarJson = JSON.parse(self.calendar);
-    self.submissionCalendar = new Map();
-    self.submitStats = matchedUser.submitStats;
-
-    if (self.calendar) {
-      const submissionCalendarJson = JSON.parse(self.calendar);
-
-      for (const timeKey in submissionCalendarJson) {
-        if (submissionCalendarJson.hasOwnProperty(timeKey)) {
-          self.submissionCalendar.set(timeKey, submissionCalendarJson[timeKey]);
-        }
-      }
-    }
-
-    self.values = Array.from(self.submissionCalendar.values());
-    self.recentTenSubmissions = self.values.slice(-10);
-
-    return self;
+    return {
+      username: matchedUser.username as string,
+      easy_solved: matchedUser.submitStats.acSubmissionNum[1].count,
+      easy_submitted: matchedUser.submitStats.acSubmissionNum[1].submissions,
+      medium_solved: matchedUser.submitStats.acSubmissionNum[2].count,
+      medium_submitted: matchedUser.submitStats.acSubmissionNum[2].submissions,
+      hard_solved: matchedUser.submitStats.acSubmissionNum[3].count,
+      hard_submitted: matchedUser.submitStats.acSubmissionNum[3].submissions,
+      total_solved: matchedUser.submitStats.acSubmissionNum[0].count,
+      total_submitted: matchedUser.submitStats.acSubmissionNum[0].submissions,
+      submitStats: matchedUser.submitStats,
+    };
   } catch (error) {
     throw new LeetcodeClientFetchUserStatError(username, error as Error);
   }
