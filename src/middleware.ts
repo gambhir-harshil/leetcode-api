@@ -2,12 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import CustomError from "@/lib/types/errors";
 import { errorResponseHandler } from "@/lib/helpers";
 import { verifyJWT } from "./lib/token";
-import { request } from "http";
 
 export async function middleware(request: NextRequest) {
   try {
     const url = request.nextUrl;
-    if (url.href.includes("/leaderboard") || url.href.includes("/profile")) {
+    if (url.href.includes("/profile")) {
       if (!request.cookies.has("session")) {
         if (url.searchParams.get("justAuthenticated"))
           return NextResponse.next();

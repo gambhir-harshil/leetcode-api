@@ -13,6 +13,7 @@
     "autoprefixer": "10.4.15",
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
+    "chart.js": "^4.4.0",
     "cookie": "^0.5.0",
     "dotenv": "^16.3.1",
     "eslint": "^8.48.0",
@@ -26,6 +27,7 @@
     "postcss": "8.4.28",
     "prettier": "^2.8.8",
     "react": "18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.46.1",
     "react-icons": "^4.11.0",
@@ -41,6 +43,7 @@
     "@types/node": "20.5.3",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
-    "@typescript-eslint/parser": "^5.62.0"
+    "@typescript-eslint/parser": "^5.62.0",
+    "faker": "^6.6.6"
   }
 }
