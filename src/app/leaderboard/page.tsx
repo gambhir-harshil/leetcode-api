@@ -1,3 +1,7 @@
-export default function UserPage() {
-  return <div className="p-5">leaderboard page</div>;
+import LeaderboardMain from "@/components/leaderboard/LeaderboardMain";
+
+type LeaderboardPageProps = {};
+
+export default function LeaderboardPage({}: LeaderboardPageProps) {
+  return <LeaderboardMain />;
 }
