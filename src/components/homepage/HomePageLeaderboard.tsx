@@ -11,7 +11,7 @@ export default function HomePageLeaderboard() {
         return (
           <div
             key={user.id}
-            className="flex text-[#676767] bg-[#eaebff] rounded px-4 py-2 my-2"
+            className="flex text-[#676767] bg-[#eaebff] rounded px-4 py-2 my-2 cursor-pointer hover:opacity-90"
           >
             <p className="mr-5 w-5">{user.id}</p>
             <p>{user.name}</p>

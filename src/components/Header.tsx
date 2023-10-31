@@ -16,7 +16,7 @@ export default function Header({ openMenu }: HeaderProps) {
     <MaxWidthWrapper val={MAX_WIDTH} className="bg-[#8075FF]">
       <header>
         <div className="w-full px-4 py-6 lg:px-7 lg:py-5 text-white flex justify-between items-center">
-          <p className="font-extrabold text-sm w-[50%] lg:text-xl lg:w-[35%]">
+          <p className="font-extrabold text-sm w-[50%] lg:text-xl lg:w-[35%] cursor-pointer">
             Nothing to FAANG 🚀
           </p>
           <ul className="w-[30%] items-center space-x-7 font-bold hidden lg:flex">
