@@ -12,7 +12,7 @@ export default function LeaderboardMain() {
         <LeaderboardLanding />
       </LeftChild>
       <RightChild>
-        <p>testing right</p>
+        <p></p>
       </RightChild>
     </DashboardLayout>
   );

@@ -28,5 +28,5 @@ const DATA = [
 ];
 
 export default function LeaderboardTable() {
-  return <TableComp data={DATA} />;
+  return <TableComp data={DATA} tableType="leaderboard" />;
 }
